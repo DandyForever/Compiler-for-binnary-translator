@@ -92,6 +92,7 @@ void compile_file (const char* input_file_name, Label_t* labels, int* num_of_lab
         }
 
     }
+    binnary = 0;
 
     fclose (input_file);
 }
