@@ -253,6 +253,7 @@ DEF_CMD(PUSH, COMMAND(PUSH)
             buffer[(*index)++] = PUSH;
             buffer[(*index)++] = REGRAM;
             buffer[(*index)++] = tell_register (register_name);
+	    binnary += 21;
         }
 
         else
@@ -274,12 +275,14 @@ DEF_CMD(PUSH, COMMAND(PUSH)
                     buffer[(*index)++] = PUSH;
                     buffer[(*index)++] = VAL;
                     buffer[(*index)++] = (int)value;
+		    binnary += 5;
                 }
                 else
                 {
                     buffer[(*index)++] = PUSH;
                     buffer[(*index)++] = RAM;
                     buffer[(*index)++] = (int)value;
+		    binnary += 14;
                 }
             }
             else
@@ -287,6 +290,7 @@ DEF_CMD(PUSH, COMMAND(PUSH)
                 buffer[(*index)++] = PUSH;
                 buffer[(*index)++] = REG;
                 buffer[(*index)++] = tell_register (register_name);
+		binnary += 1;
             }
         }
         free (register_name);
@@ -393,6 +397,7 @@ DEF_CMD(POP, COMMAND(POP)
             buffer[(*index)++] = POP;
             buffer[(*index)++] = REGRAM;
             buffer[(*index)++] = tell_register (register_name);
+	    binnary += 20;
         }
         else
         {
@@ -410,12 +415,14 @@ DEF_CMD(POP, COMMAND(POP)
                 buffer[(*index)++] = POP;
                 buffer[(*index)++] = RAM;
                 buffer[(*index)++] = value;
+		binnary += 14;
             }
             else
             {
                 buffer[(*index)++] = POP;
                 buffer[(*index)++] = REG;
-                buffer[(*index)++] = tell_register (register_name);
+                buffer[(*index)++] = tell_register (register_name);	
+		binnary += 1;
             }
         }
         free (register_name);
@@ -539,18 +546,18 @@ DEF_CMD(SQRT, SIMPLE_COMMAND(SQRT, 0), MATH(sqrt, SQRT), SIMPLE_COMMAND_DIS(SQRT
 DEF_CMD(SIN,  SIMPLE_COMMAND(SIN, 0),  MATH(sin, SIN),   SIMPLE_COMMAND_DIS(SIN))
 DEF_CMD(COS,  SIMPLE_COMMAND(COS, 0),  MATH(cos, COS),   SIMPLE_COMMAND_DIS(COS))
 
-DEF_CMD(REV, SIMPLE_COMMAND(REV, 0), case REV:
+DEF_CMD(REV, SIMPLE_COMMAND(REV, 1), case REV:
             i = (int) cpu.calls.Pop ();
             break;,
                                                       SIMPLE_COMMAND_DIS(REV))
 
-DEF_CMD(JE,  JUMP_COMMAND(JE,  0),  JUMP_IF(JE,                       abs (value1 - value2) < EPS),   JUMP_COMMAND_DIS(JE))
-DEF_CMD(JNE, JUMP_COMMAND(JNE, 0), JUMP_IF(JNE,                    !(abs (value1 - value2) < EPS)),  JUMP_COMMAND_DIS(JNE))
-DEF_CMD(JA,  JUMP_COMMAND(JA,  0),  JUMP_IF(JA,  value2 > value1 && !(abs (value1 - value2) < EPS)),  JUMP_COMMAND_DIS(JA))
-DEF_CMD(JAE, JUMP_COMMAND(JAE, 0), JUMP_IF(JAE, value2 > value1 ||   abs (value1 - value2) < EPS),   JUMP_COMMAND_DIS(JAE))
-DEF_CMD(JB,  JUMP_COMMAND(JB,  0),  JUMP_IF(JB,  value2 < value1 && !(abs (value1 - value2) < EPS)),  JUMP_COMMAND_DIS(JB))
-DEF_CMD(JBE, JUMP_COMMAND(JBE, 0), JUMP_IF(JBE, value2 < value1 ||   abs (value1 - value2) < EPS),   JUMP_COMMAND_DIS(JBE))
-DEF_CMD(JMP, JUMP_COMMAND(JMP, 5), case JMP:
+DEF_CMD(JE,  JUMP_COMMAND(JE,  11),  JUMP_IF(JE,                       abs (value1 - value2) < EPS),   JUMP_COMMAND_DIS(JE))
+DEF_CMD(JNE, JUMP_COMMAND(JNE, 11), JUMP_IF(JNE,                    !(abs (value1 - value2) < EPS)),  JUMP_COMMAND_DIS(JNE))
+DEF_CMD(JA,  JUMP_COMMAND(JA,  11),  JUMP_IF(JA,  value2 > value1 && !(abs (value1 - value2) < EPS)),  JUMP_COMMAND_DIS(JA))
+DEF_CMD(JAE, JUMP_COMMAND(JAE, 11), JUMP_IF(JAE, value2 > value1 ||   abs (value1 - value2) < EPS),   JUMP_COMMAND_DIS(JAE))
+DEF_CMD(JB,  JUMP_COMMAND(JB,  11),  JUMP_IF(JB,  value2 < value1 && !(abs (value1 - value2) < EPS)),  JUMP_COMMAND_DIS(JB))
+DEF_CMD(JBE, JUMP_COMMAND(JBE, 11), JUMP_IF(JBE, value2 < value1 ||   abs (value1 - value2) < EPS),   JUMP_COMMAND_DIS(JBE))
+DEF_CMD(JMP, JUMP_COMMAND(JMP, 5 ), case JMP:
             BAD_JUMPING
             i = buffer[i + 1] - 1;
 
@@ -558,7 +565,7 @@ DEF_CMD(JMP, JUMP_COMMAND(JMP, 5), case JMP:
 
                                                                                                   JUMP_COMMAND_DIS(JMP))
 
-DEF_CMD(CALL, JUMP_COMMAND(CALL, 0), case CALL:
+DEF_CMD(CALL, JUMP_COMMAND(CALL, 5), case CALL:
             BAD_JUMPING
             {cpu.calls.Push (i + 1);
 
